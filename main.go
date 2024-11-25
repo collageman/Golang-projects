@@ -36,7 +36,11 @@ func main()  {
 		fmt.Println("Enter number of tickets: ")
 		fmt.Scan(&userTickets)
 
-		if userTickets <= remainingTickets {
+		isValidName := len(firstName) >= 2 && len(lastName) >= 2
+		isValidEmail := strings.Contains(email, "@")
+		isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
+
+		if isValidEmail && isValidName && isValidTicketNumber {
 			remainingTickets= remainingTickets - userTickets
 			bookings= append(bookings,firstName + " " + lastName)
 			
@@ -54,9 +58,19 @@ func main()  {
 				fmt.Println("Our conference is booked out. Come back next year.")
 				break
 			}
-		}
-		fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets.\n", remainingTickets, userTickets)
-			continue
-		
+		} else {
+			if !isValidName {
+				fmt.Println("first name or last name entered is too short.")
+			}
+			if !isValidEmail {
+				fmt.Println("email addresss you entered doesn't contain @ sign.")
+			}
+			if !isValidTicketNumber {
+				fmt.Println("number is tickets you entered is invalid")
+			}
+		} 
 	}
 }
+
+/* 1. Add functionality to tell if the input is invalid after hitting enter and allow the user to enter again. 
+2. the program to exit after 3 attempts. */
