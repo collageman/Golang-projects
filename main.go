@@ -10,10 +10,7 @@ func main()  {
 	const conferenceTickets = 50
 	var remainingTickets uint=50
 
-	fmt.Printf("Welcome to %v booking application.\n", conferenceName)
-	fmt.Printf("We have a total of %v tickets and %v are still available.\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your tickets here to attend.")
-
+	greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
 	bookings :=[]string{}
 	
@@ -47,13 +44,8 @@ func main()  {
 			fmt.Printf("Thank you %v %v for booking %v tickets.\nYou will receive a confirmation email at %v shortly.\n", firstName, lastName, userTickets,email)
 			fmt.Printf("%v tickets remaining for %v.\n", remainingTickets, conferenceName)
 
-			firstNames := []string{}
-			for _, booking := range bookings {
-				names:=strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
-			}
-			fmt.Printf("The first names of bookings: %v\n", firstNames)
-
+			printFirstNames(bookings)
+			
 			if remainingTickets == 0 {
 				fmt.Println("Our conference is booked out. Come back next year.")
 				break
@@ -72,5 +64,21 @@ func main()  {
 	}
 }
 
+func greetUsers(confName string, confTickets int, remainingTicket uint) {
+	fmt.Printf("Welcome to %v booking application\n", confName)
+	fmt.Printf("We have a total of %v tickets and %v are still available.\n", confTickets, remainingTicket)
+	fmt.Println("Get your tickets here to attend.")
+
+}
+
+func printFirstNames (bookings []string) {
+	firstNames := []string{}
+			for _, booking := range bookings {
+				names:=strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+			fmt.Printf("The first names of bookings: %v\n", firstNames)
+
+}
 /* 1. Add functionality to tell if the input is invalid after hitting enter and allow the user to enter again. 
 2. the program to exit after 3 attempts. */
