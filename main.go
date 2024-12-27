@@ -3,14 +3,20 @@ package main
 import (
 	"booking-application/helper"
 	"fmt"
-	"strings"
 )
 
 const conferenceTickets = 50
 
 var conferenceName = "Phanerosis conference"
 var remainingTickets uint = 50
-var bookings = []string{}
+var bookings = make([]UserData, 0)
+
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+}
 
 func main() {
 
@@ -24,6 +30,8 @@ func main() {
 
 		if isValidEmail && isValidName && isValidTicketNumber {
 			bookTicket(userTickets, firstName, lastName, email)
+
+			go helper.SendTicket(userTickets, firstName, lastName, email)
 
 			firstNames := getFirstNames()
 			fmt.Printf("The first names of bookings: %v\n", firstNames)
@@ -56,8 +64,7 @@ func greetUsers() {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		names := strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking.firstName)
 	}
 	return firstNames
 }
@@ -67,7 +74,7 @@ func getUserInput() (string, string, string, uint) {
 	var lastName string
 	var email string
 	var userTickets uint
-	//ask user for their name
+	
 	fmt.Println("Enter your first name: ")
 	fmt.Scan(&firstName)
 
@@ -85,11 +92,23 @@ func getUserInput() (string, string, string, uint) {
 
 func bookTicket(userTickets uint, firstName string, lastName string, email string) {
 	remainingTickets = remainingTickets - userTickets
-	bookings = append(bookings, firstName+" "+lastName)
+
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	}
+
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings is %v\n", bookings)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets.\nYou will receive a confirmation email at %v shortly.\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%v tickets remaining for %v.\n", remainingTickets, conferenceName)
 }
 
-/* 1. Add functionality to tell if the input is invalid after hitting enter and allow the user to enter again.
-2. the program to exit after 3 attempts. */
+/* 
+1. Add a function to tell if the input is invalid after hitting enter and allow the user to enter again.
+2. Add a  function to break the program to after 3 unsuccessful attempts.
+3. 
+*/
